@@ -67,18 +67,34 @@ class HuffmanSuite extends FunSuite {
   test("combine.insert works") {
     val f = makeCodeTree(Leaf('e', 1), Leaf('t', 2))
     val l = List(Leaf('x', 4))
-    println(insert(f, l))
+    println("combine: " + insert(f, l))
   }
 
   test("combine of some leaf list") {
     val leaflist = List(Leaf('e', 1), Leaf('t', 2), Leaf('x', 4))
-    assert(combine(leaflist) === List(Fork(Leaf('e',1),Leaf('t',2),List('e', 't'),3), Leaf('x',4)))
+    val cb1 = combine(leaflist)
+    val cb2 = combine(cb1)
+    val cb3 = combine(cb2)
+    assert(cb1 === List(Fork(Leaf('e',1),Leaf('t',2),List('e', 't'),3), Leaf('x',4)))
+    assert(cb2 === List(Fork(Fork(Leaf('e',1), Leaf('t', 2), List('e', 't'), 3), Leaf('x',4), List('e', 't', 'x'), 7)))
+    assert(cb3 === List(Fork(Fork(Leaf('e',1), Leaf('t', 2), List('e', 't'), 3), Leaf('x',4), List('e', 't', 'x'), 7)))
   }
 
   test("until works") {
     val leaflist = List(Leaf('e', 1), Leaf('t', 2), Leaf('x', 4))
     val codetree = until(singleton, combine)(leaflist)
-    println(codetree)
+    assert(codetree === List(Fork(Fork(Leaf('e',1), Leaf('t', 2), List('e', 't'), 3), Leaf('x',4), List('e', 't', 'x'), 7)))
+  }
+
+  test("createCodeTree") {
+    val t1 = createCodeTree(string2Chars("a"))
+    println(t1)
+    val t2 = createCodeTree(string2Chars("ab"))
+    println(t2)
+    val t3 = createCodeTree(string2Chars("aba"))
+    println(t3)
+    val t4 = createCodeTree(string2Chars("abaacb"))
+    println(t4)
   }
 
 //  test("decode and encode a very short text should be identity") {

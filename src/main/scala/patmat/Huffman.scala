@@ -169,9 +169,7 @@ object Huffman {
    * unchanged.
    */
   def combine(trees: List[CodeTree]): List[CodeTree] = {
-    if (trees.isEmpty) trees
-    else if (trees.tail.isEmpty) trees
-    else if (trees.tail.tail.isEmpty) trees
+    if (trees.isEmpty || trees.tail.isEmpty) trees
     else insert(makeCodeTree(trees.head, trees.tail.head), trees.tail.tail)
   }
 
@@ -180,10 +178,10 @@ object Huffman {
       case List() => List(f)
       case x :: xs => x match {
         case Leaf(c, w) =>
-          if (f.weight <= w) f :: l
+          if (f.weight <= w) f :: x :: xs
           else x :: insert(f, xs)
         case Fork(lt, rt, ls, w) =>
-          if (f.weight <= w) f :: l
+          if (f.weight <= w) f :: x :: xs
           else x :: insert(f, xs)
       }
     }
@@ -210,13 +208,7 @@ object Huffman {
   def until(pred: List[CodeTree] => Boolean,
             repeat: List[CodeTree] => List[CodeTree])
            (trees: List[CodeTree]): List[CodeTree] = {
-    if (pred(trees)) {
-      println("pred true: " + trees)
-      trees
-    } else {
-      println("pred false: " + trees)
-      until(pred, repeat)(repeat(trees))
-    }
+    if (pred(trees)) trees else until(pred, repeat)(repeat(trees))
   }
 
   /**
@@ -225,7 +217,7 @@ object Huffman {
    * The parameter `chars` is an arbitrary text. This function extracts the character
    * frequencies from that text and creates a code tree based on them.
    */
-  def createCodeTree(chars: List[Char]): CodeTree = ???
+  def createCodeTree(chars: List[Char]): CodeTree = until(singleton, combine)(makeOrderedLeafList(times(chars))).head
 
 
 
