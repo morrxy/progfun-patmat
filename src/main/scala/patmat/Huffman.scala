@@ -169,29 +169,24 @@ object Huffman {
    * unchanged.
    */
   def combine(trees: List[CodeTree]): List[CodeTree] = {
-    //    trees match {
-    //    case List() => trees // trees is empty
-    //    case x :: xs => xs match {
-    //      case List() => trees // trees has 1 elem at least
-    //      case y :: ys => ys match {
-    //        case List() => trees // trees has 1 elem only
-    //        case  z :: zs =>  // trees has 2 elems at least
-    //          makeCodeTree(x, y)
-    //      }
-    //    }
-    //  }
-
-    def insert(f: Fork, l: List[CodeTree]): List[CodeTree] = {
-      l match {
-        case List() => ???
-        case x :: xs => ???
-      }
-    }
-
     if (trees.isEmpty) trees
     else if (trees.tail.isEmpty) trees
     else if (trees.tail.tail.isEmpty) trees
     else insert(makeCodeTree(trees.head, trees.tail.head), trees.tail.tail)
+  }
+
+  def insert(f: Fork, l: List[CodeTree]): List[CodeTree] = {
+    l match {
+      case List() => List(f)
+      case x :: xs => x match {
+        case Leaf(c, w) =>
+          if (f.weight <= w) f :: l
+          else x :: insert(f, xs)
+        case Fork(lt, rt, ls, w) =>
+          if (f.weight <= w) f :: l
+          else x :: insert(f, xs)
+      }
+    }
   }
 
   /**
@@ -211,7 +206,18 @@ object Huffman {
    *    the example invocation. Also define the return type of the `until` function.
    *  - try to find sensible parameter names for `xxx`, `yyy` and `zzz`.
    */
-  def until(xxx: ???, yyy: ???)(zzz: ???): ??? = ???
+//  def until(xxx: ???, yyy: ???)(zzz: ???): ??? = ???
+  def until(pred: List[CodeTree] => Boolean,
+            repeat: List[CodeTree] => List[CodeTree])
+           (trees: List[CodeTree]): List[CodeTree] = {
+    if (pred(trees)) {
+      println("pred true: " + trees)
+      trees
+    } else {
+      println("pred false: " + trees)
+      until(pred, repeat)(repeat(trees))
+    }
+  }
 
   /**
    * This function creates a code tree which is optimal to encode the text `chars`.
