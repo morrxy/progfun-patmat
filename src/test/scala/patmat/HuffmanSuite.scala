@@ -48,10 +48,22 @@ class HuffmanSuite extends FunSuite {
     println(t)
   }
 
-//  test("makeOrderedLeafList for some frequency table") {
-//    assert(makeOrderedLeafList(List(('t', 2), ('e', 1), ('x', 3))) === List(Leaf('e',1), Leaf('t',2), Leaf('x',3)))
-//  }
-//
+  test("makeOrderedLeafList for some frequency table") {
+    println(makeOrderedLeafList(List(('t', 2), ('e', 1), ('x', 3))))
+    assert(makeOrderedLeafList(List(('t', 2), ('e', 1), ('x', 3))) === List(Leaf('e',1), Leaf('t',2), Leaf('x',3)))
+  }
+
+  test("singleton works") {
+    val t2 = Leaf('a',2)
+    val t3 = Fork(Leaf('a',2), Leaf('b',3), List('a','b'), 5)
+    val t4 = Leaf('d', 4)
+
+    assert(singleton(List()) === false)
+    assert(singleton(List(t2)) === true)
+    assert(singleton(List(t2, t3)) === false)
+    assert(singleton(List(t2, t3, t4)) === false)
+  }
+
 //  test("combine of some leaf list") {
 //    val leaflist = List(Leaf('e', 1), Leaf('t', 2), Leaf('x', 4))
 //    assert(combine(leaflist) === List(Fork(Leaf('e',1),Leaf('t',2),List('e', 't'),3), Leaf('x',4)))
