@@ -88,13 +88,31 @@ class HuffmanSuite extends FunSuite {
 
   test("createCodeTree") {
     val t1 = createCodeTree(string2Chars("a"))
-    println(t1)
+    println("t1:" + t1)
     val t2 = createCodeTree(string2Chars("ab"))
-    println(t2)
+    println("t2:" + t2)
     val t3 = createCodeTree(string2Chars("aba"))
-    println(t3)
+    println("t3:" + t3)
     val t4 = createCodeTree(string2Chars("abaacb"))
-    println(t4)
+    println("t4:" + t4)
+  }
+
+  test("decode works") {
+    val t2 = createCodeTree(string2Chars("ab"))
+    val l2 = List(1, 0)
+    assert(decode(t2, l2) === List('a', 'b'))
+
+    val t3 = createCodeTree(string2Chars("aba"))
+    val l3 = List(1, 0, 1)
+    assert(decode(t3, l3) === List('a','b','a'))
+
+    val t4 = createCodeTree(string2Chars("abaacb"))
+    val l4 = List(1,0,1,1,1,0,0,0,1)
+    assert(decode(t4, l4) === List('a','b','a','a','c','b'))
+  }
+
+  test("decodedSecret") {
+    println("decodedSecret: " + decodedSecret)
   }
 
 //  test("decode and encode a very short text should be identity") {
