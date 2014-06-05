@@ -115,6 +115,25 @@ class HuffmanSuite extends FunSuite {
     println("decodedSecret: " + decodedSecret)
   }
 
+  test("treverse works?") {
+    val t2 = createCodeTree(string2Chars("ab"))
+    val t3 = createCodeTree(string2Chars("aba"))
+    val t4 = createCodeTree(string2Chars("abaacb"))
+    val french = frenchCode
+
+    println("t2:" + t2)
+    traverse(t2)
+
+    println("t3:" + t3)
+    traverse(t3)
+
+    println("t4:" + t4)
+    traverse(t4)
+
+    println("french:" + french)
+    traverse(french)
+  }
+
 //  test("decode and encode a very short text should be identity") {
 //    new TestTrees {
 //      assert(decode(t1, encode(t1)("ab".toList)) === "ab".toList)
