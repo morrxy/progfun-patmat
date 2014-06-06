@@ -115,28 +115,47 @@ class HuffmanSuite extends FunSuite {
     println("decodedSecret: " + decodedSecret)
   }
 
-  test("treverse works?") {
-    val t2 = createCodeTree(string2Chars("ab"))
-    val t3 = createCodeTree(string2Chars("aba"))
-    val t4 = createCodeTree(string2Chars("abaacb"))
-    val french = frenchCode
+//  test("treeContain works") {
+//    val t1 = createCodeTree(string2Chars("a"))
+//    val t4 = createCodeTree(string2Chars("abaacb"))
+//
+//    assert(treeContain('a', t1) === true)
+//    assert(treeContain('b', t1) === false)
+//
+//    assert(treeContain('a', t4) === true)
+//    assert(treeContain('b', t4) === true)
+//    assert(treeContain('c', t4) === true)
+//    assert(treeContain('d', t4) === false)
+//
+//    assert(treeContain('h', frenchCode) === true)
+//    assert(treeContain('c', frenchCode) === true)
+//    assert(treeContain('1', frenchCode) === false)
+//    assert(treeContain('2', frenchCode) === false)
+//  }
 
+  test("encode works") {
+    val l1 = string2Chars("a")
+    val t1 = createCodeTree(l1)
+    println("l1:" + l1)
+    println("t1:" + t1)
+    println("encode t1:" + encode(t1)(l1))
+
+    val l2 = string2Chars("ab")
+    val t2 = createCodeTree(l2)
+    println("l2:" + l2)
     println("t2:" + t2)
-    traverse(t2)
+    println("encode t2:" + encode(t2)(l2))
 
+    val l3 = string2Chars("aba")
+    val t3 = createCodeTree(l2)
+    println("l3:" + l3)
     println("t3:" + t3)
-    traverse(t3)
-
-    println("t4:" + t4)
-    traverse(t4)
-
-    println("french:" + french)
-    traverse(french)
+    println("encode t3:" + encode(t3)(l3))
   }
 
-//  test("decode and encode a very short text should be identity") {
-//    new TestTrees {
-//      assert(decode(t1, encode(t1)("ab".toList)) === "ab".toList)
-//    }
-//  }
+  test("decode and encode a very short text should be identity") {
+    new TestTrees {
+      assert(decode(t1, encode(t1)("ab".toList)) === "ab".toList)
+    }
+  }
 }

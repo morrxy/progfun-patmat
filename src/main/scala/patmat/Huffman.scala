@@ -282,25 +282,26 @@ object Huffman {
    * into a sequence of bits.
    */
   def encode(tree: CodeTree)(text: List[Char]): List[Bit] = {
-    text match {
-      case List() => List()
-      case x :: xs => whichBranch(x, tree) :: encode(tree)(xs)
-    }
-  }
-
-  def whichBranch(c: Char, t: CodeTree): Bit = {
-
-  }
-
-  def traverse(tree: CodeTree): Unit = {
-    tree match {
-      case Fork(l, r, c, w) => {
-        traverse(l)
-        traverse(r)
+    def encodeRec(text: List[Char], currentTree: CodeTree): List[Bit] = {
+      text match {
+        case List() => List()
+        case char :: smallerText => currentTree match {
+          case Leaf(_, _) => encodeRec(smallerText, tree)
+          case Fork(left, right, _, _) =>
+            if (treeContain(char, left)) 0 :: encodeRec(text, left)
+            else 1 :: encodeRec(text, right)
+        }
       }
-      case Leaf(c, w) => println(c)
     }
+    def treeContain(c: Char, t: CodeTree): Boolean = {
+      t match {
+        case Fork(left, right, _, _) => treeContain(c, left) || treeContain(c, right)
+        case Leaf(ch, _) => if (ch == c) true else false
+      }
+    }
+    encodeRec(text, tree)
   }
+
 
 
   // Part 4b: Encoding using code table
