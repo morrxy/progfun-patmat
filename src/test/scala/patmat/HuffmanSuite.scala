@@ -158,4 +158,29 @@ class HuffmanSuite extends FunSuite {
       assert(decode(t1, encode(t1)("ab".toList)) === "ab".toList)
     }
   }
+
+  test("codeBits works") {
+    val table = List(('a', List(0, 1)), ('b', List(1)), ('c', List(0, 1, 1)))
+    assert(codeBits(table)('a') == List(0, 1))
+    assert(codeBits(table)('b') == List(1))
+    assert(codeBits(table)('c') == List(0, 1, 1))
+  }
+
+  test("mergeCodeTables works") {
+    val t0 = List()
+    val t2 = List(('a', List(1)), ('b', List(0, 1)))
+    val t3 = List(('c', List(1, 0, 1)), ('d', List(1, 1, 1)), ('e', List(0, 1, 0)))
+
+    assert(mergeCodeTables(t0, t2) === List(('a', List(1)), ('b', List(0, 1))))
+    assert(mergeCodeTables(t2, t3) === List(('a', List(1)), ('b', List(0, 1)), ('c', List(1, 0, 1)), ('d', List(1, 1, 1)), ('e', List(0, 1, 0))))
+    assert(mergeCodeTables(t3, t2) === List(('c', List(1, 0, 1)), ('d', List(1, 1, 1)), ('e', List(0, 1, 0)), ('a', List(1)), ('b', List(0, 1))))
+  }
+
+  test("convert works") {
+    val t1 = Fork(Leaf('a',2), Leaf('b',3), List('a','b'), 5)
+    val t2 = Fork(Fork(Leaf('a',2), Leaf('b',3), List('a','b'), 5), Leaf('d',4), List('a','b','d'), 9)
+    println("convert t1: " + convert(t1))
+    println("convert t2: " + convert(t2))
+  }
+
 }
