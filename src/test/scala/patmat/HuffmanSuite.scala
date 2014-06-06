@@ -177,10 +177,41 @@ class HuffmanSuite extends FunSuite {
   }
 
   test("convert works") {
+    val t0 = Leaf('a', 2)
     val t1 = Fork(Leaf('a',2), Leaf('b',3), List('a','b'), 5)
     val t2 = Fork(Fork(Leaf('a',2), Leaf('b',3), List('a','b'), 5), Leaf('d',4), List('a','b','d'), 9)
-    println("convert t1: " + convert(t1))
-    println("convert t2: " + convert(t2))
+    assert(convert(t0) === List(('a', List())))
+    assert(convert(t1) === List(('a', List(0)), ('b', List(1))))
+    assert(convert(t2) === List(('a', List(0,0)), ('b', List(0,1)), ('d', List(1))))
+  }
+
+  test("putolast works") {
+    val l1 = List(0)
+    val l2 = List(1, 0)
+    val l3 = List(0, 1, 0)
+    assert(putToLast(0, l1) === List(0, 0))
+    assert(putToLast(1, l1) === List(0, 1))
+    assert(putToLast(0, l2) === List(1, 0, 0))
+    assert(putToLast(1, l2) === List(1, 0, 1))
+    assert(putToLast(0, l3) === List(0, 1, 0, 0))
+    assert(putToLast(1, l3) === List(0, 1, 0, 1))
+  }
+
+  test("quickEncode works") {
+    val t1 = Fork(Leaf('a',2), Leaf('b',3), List('a','b'), 5)
+    val t2 = Fork(Fork(Leaf('a',2), Leaf('b',3), List('a','b'), 5), Leaf('d',4), List('a','b','d'), 9)
+
+    val b0 = quickEncode(t1)(List())
+    val b1 = quickEncode(t1)(List('a'))
+    val b2 = quickEncode(t1)(List('a','b'))
+
+    assert(quickEncode(t1)(List()) === List())
+    assert(quickEncode(t1)(List('a')) === List(0))
+    assert(quickEncode(t1)(List('b')) === List(1))
+    assert(quickEncode(t1)(List('b','a')) === List(1, 0))
+    assert(quickEncode(t2)(List('a','b','d')) === List(0,0,0,1,1))
+    assert(quickEncode(t2)(List('d','a','b','b','a')) === List(1,0,0,0,1,0,1,0,0))
+
   }
 
 }
