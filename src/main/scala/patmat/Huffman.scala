@@ -187,27 +187,11 @@ object Huffman {
   def insert(f: Fork, l: List[CodeTree]): List[CodeTree] = {
     l match {
       case List() => List(f)
-      case x :: xs => x match {
-        case Leaf(_, w) =>
-          // how to remove redundant
-          if (f.weight <= w) f :: x :: xs
-          else x :: insert(f, xs)
-        case Fork(_, _, _, w) =>
-          // how to remove redundant
-          if (f.weight <= w) f :: x :: xs
-          else x :: insert(f, xs)
-      }
+      case x :: xs =>
+        if (f.weight <= weight(x)) f :: x :: xs
+        else x :: insert(f, xs)
     }
   }
-
-//  def insert(f: Fork, l: List[CodeTree]): List[CodeTree] = {
-//    l match {
-//      case List() => List(f)
-//      case x :: xs =>
-//        if (f.weight <= x.weight) f :: x :: xs
-//        else x :: insert(f, xs)
-//    }
-//  }
 
   /**
    * This function will be called in the following way:
